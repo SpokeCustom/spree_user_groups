@@ -25,6 +25,11 @@ class Spree::Calculator::PerVariantPricing < Spree::Calculator
   end
   
   def compute_item(variant)
-    variant.price_for_user(current_user)
+    ugv = Spree::User.current.
+        user_group.
+        user_groups_variants.
+        where(variant: variant).
+        first
+    ugv.try(:price) || variant.price_in_without_user_group_pricing('USD').amount
   end
 end

@@ -12,6 +12,6 @@ class Spree::UserGroup < ActiveRecord::Base
   end
 
   def price_for_variant variant
-    user_groups_variants.where(variant: variant).first.try(:price)
+    calculator.try(:compute_item, variant)
   end
 end

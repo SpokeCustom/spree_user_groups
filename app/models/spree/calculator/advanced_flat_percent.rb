@@ -41,10 +41,10 @@ class Spree::Calculator::AdvancedFlatPercent < Spree::Calculator
       if !variant.cost_price.nil? && variant.cost_price > 0
         variant.cost_price * (1 + part)
       else
-        variant.price
+        variant.price_in_without_user_group_pricing('USD').amount
       end
     else
-      variant.price * (1 - part)
+      variant.price_in_without_user_group_pricing('USD').amount * (1 - part)
     end
   end
 end
