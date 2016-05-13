@@ -34,7 +34,7 @@ class Spree::Calculator::AdvancedFlatPercent < Spree::Calculator
     end
   end
   
-  def compute_item(variant)
+  def compute_item(variant, quantity)
     part = self.preferred_flat_percent.abs / 100.0
     
     if self.preferred_based_on_cost_price
