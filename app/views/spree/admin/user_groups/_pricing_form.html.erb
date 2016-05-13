@@ -5,23 +5,38 @@
       <% curr_product = v.product_id %>
       <tr>
         <td colspan="3">
-          <h2><%= v.product.name %></h2>
+          <h2><%= v.label %></h2>
         </td>
       </tr>
     <% end %>
-
-    <% ugv = Spree::UserGroupsVariant.where(:user_group_id => @user_group).where(:variant_id => v).first %>
     <tr>
-      <td>
+      <td colspan="3" style="background-color: #ebf3fb;">
         <%= variant_options(v) || Spree.t(:master) %> (<%= v.sku %>)
-      </td>
-      <td>
+        ::
         Base Price (<%= v.price || Spree.t(:master).downcase %>)
-      <td>
-        <div data-hook="price" class="field">
-          <%= text_field_tag "price[#{@user_group.id}][#{v.id}]", (ugv.price if ugv), :class => 'fullwidth' %>
-        </div>
+        <span style="float: right;">
+          <%=
+            button_link_to "New Tier", "javascript:add_new_tier(\"tier-#{v.id}-row\");", {
+                class: 'btn-success spree_add_fields'
+            }
+          %>
+        </span>
       </td>
     </tr>
+    <% ugv = @user_group.pricing_tiers_for_variant(v) %>
+    <% ugv << Spree::UserGroupsVariant.new(variant: v, user_group: @user_group) %>
+    <%= render(partial: 'pricing_tier_form', collection: ugv, as: :tier) %>
   <% end %>
 </table>
+
+<script>
+function add_new_tier(target) {
+  var new_tier = $("#" + target + "-hidden").clone();
+  new_tier.addClass(target);
+  new_tier.prop('id', '');
+  new_tier.show();
+  
+  var last_row = $("." + target + ":last");
+  last_row.after(new_tier);
+}
+</script>

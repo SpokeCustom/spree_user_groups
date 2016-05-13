@@ -1,0 +1,38 @@
+<% if tier.id.nil? %>
+    <tr id="tier-<%= tier.variant.id %>-row-hidden" style="display:none;">
+      <td>
+        <%= hidden_field_tag "tier[#{tier.variant.id}][][id]", tier.id %>
+        <div data-hook="" class="field">
+          Min Qty: <%= text_field_tag "tier[#{tier.variant.id}][][minimum_quantity]", tier.minimum_quantity, :class => 'fullwidth' %>
+        </div>
+      </td>
+      <td>
+        <div data-hook="" class="field">
+          Max Qty: <%= text_field_tag "tier[#{tier.variant.id}][][maximum_quantity]", tier.maximum_quantity || "+", :class => 'fullwidth' %>
+        </div>
+      </td>
+      <td>
+        <div data-hook="price" class="field">
+          Price: <%= text_field_tag "tier[#{tier.variant.id}][][price]", tier.price, :class => 'fullwidth' %>
+        </div>
+      </td>
+    </tr>
+<% end %>
+    <tr class="tier-<%= tier.variant.id %>-row">
+      <td>
+        <%= hidden_field_tag "tier[#{tier.variant.id}][][id]", tier.id %>
+        <div data-hook="" class="field">
+          Min Qty: <%= text_field_tag "tier[#{tier.variant.id}][][minimum_quantity]", tier.minimum_quantity, :class => 'fullwidth' %>
+        </div>
+      </td>
+      <td>
+        <div data-hook="" class="field">
+          Max Qty: <%= text_field_tag "tier[#{tier.variant.id}][][maximum_quantity]", tier.maximum_quantity || "+", :class => 'fullwidth' %>
+        </div>
+      </td>
+      <td>
+        <div data-hook="price" class="field">
+          Price: <%= text_field_tag "tier[#{tier.variant.id}][][price]", tier.price, :class => 'fullwidth' %>
+        </div>
+      </td>
+    </tr>

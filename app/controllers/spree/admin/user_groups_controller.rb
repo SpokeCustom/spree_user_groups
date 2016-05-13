@@ -20,15 +20,22 @@ class Spree::Admin::UserGroupsController < Spree::Admin::ResourceController
   end
 
   def pricing
-    params[:price][params[:id]].each do |k,v|
-      ugv = Spree::UserGroupsVariant.where(:user_group_id => params[:id]).where(:variant_id => k).first
-      ugv.destroy if v == '' and ugv
-      next if v == ''
-      ugv.update_attributes(:price => v) if ugv and ugv.price
-      next if ugv
-      Spree::UserGroupsVariant.create!(:user_group_id => params[:id], :variant_id => k, :price => v)
-      flash.notice = Spree.t(:variant_pricing_updated_successfully)
-    end if params[:price]
+    if params[:tier]
+      Spree::UserGroupsVariant.delete_all(:user_group_id => params[:id])
+      params[:tier].each do |key, value|
+        value.each do |tier|
+          next if tier["price"] == '' || tier["minimum_quantity"].to_i <= 0 || tier["maximum_quantity"].to_i < 0
+          Spree::UserGroupsVariant.create!(
+            :user_group_id => params[:id],
+            :variant_id => key,
+            :price => tier["price"],
+            :minimum_quantity => tier["minimum_quantity"],
+            :maximum_quantity => tier["maximum_quantity"].to_i == 0 ? nil : tier["maximum_quantity"]
+          )
+        end
+        flash.notice = Spree.t(:variant_pricing_updated_successfully)
+      end
+    end
   end
   
   private
