@@ -20,7 +20,7 @@ class Spree::UserGroup < ActiveRecord::Base
   
   def has_pricing_tiers_for_variant? variant
     tiers = pricing_tiers_for_variant(variant)
-    return false if tiers == null || tiers.count == 0
+    return false if tiers.blank?
     
     tiers.count > 1 || tiers.first.minimum_quantity > 1
   end
