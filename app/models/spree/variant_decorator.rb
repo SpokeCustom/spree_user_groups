@@ -15,7 +15,7 @@ Spree::Variant.class_eval do
   alias_method_chain :price_in, :user_group_pricing
   
   def tier_price quantity, user = Spree::User.current
-    user.try(:user_group).try(:price_for_variant_quantity, self, quantity)
+    user.try(:user_group).try(:price_for_variant_quantity, self, quantity) || price_for_user(user).amount
   end
   
   def has_pricing_tiers?(user = Spree::User.current)
